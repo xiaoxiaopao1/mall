@@ -30,7 +30,7 @@ class RouterMap extends React.Component {
                 {/*后台管理页路由*/}
                 <Route path='/admin' component={BackStage}>
                     <IndexRoute component={ProductList} />
-                    <Route path='/admin/addProduct' component={AddProduct} />
+                    <Route path='/admin/addProduct(/:id)' component={AddProduct} />
                 </Route>
 
                 {/*404页面*/}

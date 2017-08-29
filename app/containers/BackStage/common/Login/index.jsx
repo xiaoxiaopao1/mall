@@ -5,7 +5,7 @@ import SessionStore from '../../../../util/sessionStore'; //缓存(里面有getI
 import { ADMININFO } from '../../../../config/sessionStoreKey';//存放关键字常量
 import { bindActionCreators } from 'redux'; //redux自带的发起action方法
 import { connect } from 'react-redux'; //连接redux
-import * as userInfoActionsFormOtherFile from '../../../../actions/userinfo'
+import * as adminInfoActionsFormOtherFile from '../../../../actions/adminInfo'
 
 
 
@@ -52,7 +52,7 @@ class Login extends React.Component {
 
 					SessionStore.setItem(ADMININFO,name);
 
-					window.location.reload();
+					this.props.loginFn(true);
 				}
 			}
 		})
@@ -71,7 +71,7 @@ function mapStateToProps(state){
 // 从redux获取操控方法
 function mapDispatchToProps(dispatch){
 	return {
-		adminInfoActions: bindActionCreators(userInfoActionsFormOtherFile,dispatch)
+		adminInfoActions: bindActionCreators(adminInfoActionsFormOtherFile,dispatch)
 	}
 }
 

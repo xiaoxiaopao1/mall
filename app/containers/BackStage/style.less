@@ -1,0 +1,21 @@
+.backstage{
+	width: 100%;
+
+	@adminWidth: 200px;
+
+	.adminInfo-container{
+		width: @adminWidth;
+		height: 100%;
+		position: absolute;
+		left: 0;
+		top: 0;
+	}
+
+	.main-container{
+		width: calc(~"100% - @{adminWidth}");
+		height: 100%;
+		position: absolute;
+		left: @adminWidth;
+		top: 0;
+	}
+}

@@ -5,11 +5,13 @@ import SessionStore from '../../util/sessionStore'; //缓存(里面有getItem和
 import { ADMININFO } from '../../config/sessionStoreKey';//存放关键字常量
 import { bindActionCreators } from 'redux'; //redux自带的发起action方法
 import { connect } from 'react-redux'; //连接redux
-import * as userInfoActionsFormOtherFile from '../../actions/userinfo'
+import * as adminInfoActionsFormOtherFile from '../../actions/adminInfo'
 
 
 import AdminInfo from './common/AdminInfo'
 import Login from './common/Login'
+
+import './style.less'
 
 class BackStage extends React.Component {
 	constructor(props,context){
@@ -21,26 +23,37 @@ class BackStage extends React.Component {
 	}
 	render(){
 		return(
-			<div>
+			<div className='backstage'>
 				{
 					this.state.initDone
-					? <div>
-						<AdminInfo />
-						{this.props.children}	
+					? <div className='clear-fix'>
+						<div className='adminInfo-container'>
+							<AdminInfo />
+						</div>
+						<div className='main-container'>
+							{this.props.children}
+						</div>	
 					  </div>
-				    : <Login />
+				    : <Login loginFn={this.loginHandler.bind(this)} />
 				}	
 			</div>	
 		)
 	}
 	componentDidMount(){
-		//从缓存localStoreage中获取用户信息
+		//从缓存SessionStore中获取用户信息
 		const adminInfo = SessionStore.getItem(ADMININFO);
 		if (adminInfo) {
 			this.props.adminInfoActions.update({
 				adminInfo: adminInfo
 			});
 
+			this.setState({
+				initDone: true
+			})
+		}
+	}
+	loginHandler(hasLogined){
+		if (hasLogined) {
 			this.setState({
 				initDone: true
 			})
@@ -60,7 +73,7 @@ function mapStateToProps(state){
 // 从redux获取操控方法
 function mapDispatchToProps(dispatch){
 	return {
-		adminInfoActions: bindActionCreators(userInfoActionsFormOtherFile,dispatch)
+		adminInfoActions: bindActionCreators(adminInfoActionsFormOtherFile,dispatch)
 	}
 }
 

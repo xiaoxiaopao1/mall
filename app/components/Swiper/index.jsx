@@ -18,9 +18,12 @@ class Swiper extends React.Component {
 				};
 
 		// 往图片信息中添加图片路径属性
+		// 路径属性这样添加，是为了不改变props
 		const newData = data.map((item,index) => {
-			item.url = require('../../static/images/poster/'+item.title);
-			return item;
+			const newItem = {};
+			newItem.title = item.title;
+			newItem.url = require(`../../static/images/poster/${item.title}`);
+			return newItem ;
 		})
 		return(
 			<div>

@@ -8,6 +8,8 @@ import BackStage from '../containers/BackStage'
 
 
 import Home from '../containers/Reception/Home'
+import Store from '../containers/Reception/Store'
+import Search from '../containers/Reception/Search'
 
 
 
@@ -25,6 +27,8 @@ class RouterMap extends React.Component {
                 {/*域名下默认页使用前台路由*/}
                 <Route path='/' component={Reception}>
                     <IndexRoute component={Home}/>
+                    <Route path='/store(/:id)' component={Store} />
+                    <Route path='/search(/:keyword)' component={Search} />
                 </Route>
 
                 {/*后台管理页路由*/}

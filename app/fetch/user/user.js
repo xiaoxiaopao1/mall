@@ -1,8 +1,11 @@
 import { get } from '../get';
 import { post } from '../post';
 
-export function getUserData(){
-	const result = get('/api/login');
+export function postLoginData(name,password){
+	const result = post('/api/login',{
+		name,
+		password
+	});
 	return result;
 }
 

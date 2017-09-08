@@ -4,7 +4,10 @@ import SessionStore from '../../util/sessionStore'; //缓存(里面有getItem和
 import { USERINFO } from '../../config/sessionStoreKey';//里面有userinfo常量，缓存关键字
 import { bindActionCreators } from 'redux'; //redux自带的发起action方法
 import { connect } from 'react-redux'; //连接redux
-import * as userInfoActionsFormOtherFile from '../../actions/userinfo'
+import * as userInfoActionsFormOtherFile from '../../actions/userInfo'
+
+import Header from './common/Header';
+
 
 // 绑定用户信息行为的一系列action
 class Reception extends React.Component {
@@ -22,9 +25,10 @@ class Reception extends React.Component {
 				{
 					this.state.initDone
 					? <div>
-						1111111
+						<Header />
+						{this.props.children}
 					  </div>
-					: <div>加载中</div>
+					: ''
 				}
 			</div>
 		)
@@ -52,7 +56,9 @@ class Reception extends React.Component {
 // 此处绑定的是把当前状态绑定到redux中
 // 从redux中获取信息
 function mapStateToProps(state){
-	return {}
+	return {
+		userInfo: state.userInfo
+	}
 }
 // 从redux获取操控方法
 function mapDispatchToProps(dispatch){

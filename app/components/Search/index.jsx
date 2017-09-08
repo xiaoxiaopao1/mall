@@ -3,7 +3,7 @@ import PureRenderMixin from 'react-addons-pure-render-mixin'
 
 import { hashHistory } from 'react-router';
 
-class SearchHeader extends React.Component {
+class Search extends React.Component {
 	constructor(props,context){
 		super(props,context);
 		this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
@@ -21,14 +21,25 @@ class SearchHeader extends React.Component {
 			</div>
 		)
 	}
+	componentDidMount(){
+		const prevKeyword = this.props.prevKeyword;
+		if (prevKeyword) {
+			this.setState({
+				keyword: prevKeyword
+			})
+		}
+	}
 	changeHandler(e){
 		this.setState({
 			keyword: e.target.value
 		})
 	}
 	clickHandler(){
-		hashHistory.push(`/search/all/${encodeURIComponent(this.state.keyword)}`);
+		if (this.props.currentKeyword === this.state.keyword) {
+			return;
+		}
+		hashHistory.push(`/search/${encodeURIComponent(this.state.keyword)}`);
 	}
 }
 
-export default SearchHeader
+export default Search

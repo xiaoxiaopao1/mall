@@ -22,3 +22,4 @@ class ProductItem extends React.Component {
 }
 
 export default ProductItem
+

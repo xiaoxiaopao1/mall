@@ -1,6 +1,6 @@
-import * as actionTypes from '../constants/userinfo'
+import * as actionTypes from '../constants/userInfo'
 
-export default function userinfo (state = {}, action) {
+export default function userInfo (state = {}, action) {
     switch (action.type) {
         case actionTypes.USERINFO_UPDATE:
             return action.data;

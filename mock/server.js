@@ -7,10 +7,8 @@ const Koa = require('koa'),
       user = require('./control/user'),
       poster = require('./control/poster'),
       product = require('./control/product'),
-      adminInfo = require('./control/admin');
-
-let search = require('./search/search');
-
+      adminInfo = require('./control/admin'),
+      store = require('./control/store');
 
 mongoose.connect('mongodb://localhost:27017/mall',{useMongoClient:true});
 
@@ -22,8 +20,8 @@ router.post('/api/productList', product.getProductList)
 // 产品数量
 router.get('/api/productCount',product.getProductCount)
 
-//用户信息
-router.get('/api/login', user.getUser);
+//前台用户登录信息
+router.post('/api/login', user.userCheck);
 
 // 注册信息
 router.post('/api/sign', user.postUser);
@@ -34,13 +32,14 @@ router.get('/api/poster', poster.getPoster)
 
 
 // 多关键字产品搜索
-router.post('/api/searchPost', product.findSearchProduct)
+router.post('/api/getSearchResult', product.getSearchResult)
 
 
-// 接收购物消息，并存储到用户信息中的storeList
-router.post('/api/store', user.addStore)
+// 接收购物消息，并存储购物信息
+router.post('/api/addToStore', store.addToStore)
 
-
+// 接收post过来的用户，获取该用户的购物信息
+router.post('/api/getStoreList',store.getStoreList)
 
 
 // 后台管理员信息

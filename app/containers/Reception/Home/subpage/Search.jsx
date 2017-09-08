@@ -1,13 +1,9 @@
 import React from 'react'
 import PureRenderMixin from 'react-addons-pure-render-mixin'
 
-import Swiper from './subpage/Swiper'
-import Search from '../../../components/Search'
-import ProductList from './subpage/ProductList'
 
 
-
-class Home extends React.Component {
+class Search extends React.Component {
 	constructor(props,context){
 		super(props,context);
 		this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
@@ -15,12 +11,16 @@ class Home extends React.Component {
 	render(){
 		return(
 			<div>
-				<Swiper />
-				<Search />
-				<ProductList />
+				111111
 			</div>
 		)
 	}
+	componentDidMount(){
+		this.resultHandler();
+	}
+	resultHandler(){
+		
+	}
 }
 
-export default Home;
+export default Search

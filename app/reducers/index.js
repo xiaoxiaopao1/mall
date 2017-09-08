@@ -1,9 +1,11 @@
 import { combineReducers } from 'redux'
-import userinfo from './userinfo'
+import userInfo from './userInfo'
 import adminInfo from './adminInfo'
+import loginForm from './loginForm'
 
 
 export default combineReducers({
-    userinfo,
-    adminInfo
+    userInfo,
+    adminInfo,
+    loginForm
 })

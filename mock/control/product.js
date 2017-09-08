@@ -5,7 +5,7 @@ const Product = require('../model/product');
 
 // 数据库查找产品数据的异步函数（产品列表和搜索都要使用）
 // 此处使用sort进行了排序，即：新添加的产品在列表第一个
-const getProductListData = (num,count) => {
+const getProductListData = (num =1,count = 3) => {
 	return new Promise((resolve,reject) => {
 		Product.find({},null,{sort: {_id: -1}}).skip((num - 1) * count).limit(count).exec((err,data) => {
 			resolve(data);
@@ -72,21 +72,44 @@ const getProductList = async (ctx) => {
 	};
 };
 
+
 // 获取搜索结果，并post回去
-const findSearchProduct = async (ctx) => {
-	const keyword = ctx.request.body.keyword;
-	const keywords = keyword.split(' ');
-	const allProduct = await getAllProductData();
-	const result = allProduct.filter(item => {
-		return keywords.some(iitem => {
-			const re = new RegExp(iitem,'i');
-			return re.test(item.title);
+const getSearchResultData = (re,num = 1, count = 3) => {
+	return new Promise((resolve,reject) => {
+		Product.find({title: re},null,{sort: {_id: -1}}).skip((num - 1) * count).limit(count).exec((err,data) => {
+			resolve(data);
 		})
-	});
+	})
+}
+
+// 获取搜索结果数量，并post回去
+const getSearchResultCountData = (re) => {
+	return new Promise((resolve,reject) => {
+		Product.find({title: re}).count().exec((err,data) => {
+			resolve(data);
+		})
+	})
+}
+
+const getSearchResult = async (ctx) => {
+	const keyword = ctx.request.body.keyword;
+
+	const reSpace = / +/g;
+	// 此处先去掉字符串的首尾空格，然后把中间的一个或多个连续空格替换为竖线
+	const keywords = keyword.trim().replace(reSpace,'|'); 
+
+	const re = new RegExp(keywords);
+	const result = await getSearchResultData(re);
+	const count = await getSearchResultCountData(re);
+
+	console.log(`count: ${count}`);
+	console.log(`____________`);
+	console.log(`result: ${result}`);
 	ctx.body = {
 		errno: 0,
 		msg: 'success',
-		data: result
+		data: result,
+		count
 	}
 }
 
@@ -169,4 +192,4 @@ const getProductCount = async (ctx) => {
 	ctx.body = count;
 }
 
-module.exports = { getProductCount,getProductList,findSearchProduct,addProduct,delProduct,updateProduct,getSingleProduct };
+module.exports = { getProductCount,getProductList,getSearchResult,addProduct,delProduct,updateProduct,getSingleProduct };

@@ -1,12 +1,16 @@
 import React from 'react'
 import PureRenderMixin from 'react-addons-pure-render-mixin'
-
 import { hashHistory } from 'react-router'
+import { bindActionCreators } from 'redux'; //redux自带的发起action方法
+import { connect } from 'react-redux'; //连接redux
+import * as userInfoActionsFormOtherFile from '../../../../actions/userInfo'
 
-import { getProductListData,delProductData } from '../../../fetch/product/product'
 
-import ProductListComponent from '../../../components/ProductList'
-import Pagination from './subpage/Pagination'
+import { getProductListData } from '../../../../fetch/product/product'
+import { addToStore } from '../../../../fetch/store/store'
+
+import ReceptionProductList from '../../../../components/ReceptionProductList'
+import Pagination from './Pagination'
 
 class ProductList extends React.Component {
 	constructor(props,context){
@@ -25,13 +29,13 @@ class ProductList extends React.Component {
 					this.state.data
 					? this.state.data.length
 					  ? <div>
-						  <ProductListComponent data={this.state.data}
+						  <ReceptionProductList data={this.state.data}
 						  						addToStoreFn={this.addToStoreHandler.bind(this)} />
 					  	  <Pagination data={this.state.data}
 					  	  			  itemCount={this.state.itemCount}
 					  	  			  pageChangeFn={this.pageChangeHandler.bind(this)} />
 					  	</div>
-					  : '还没有添加产品'
+					  	: '还没有添加产品'
 					: ''
 				}
 			</div>
@@ -70,9 +74,41 @@ class ProductList extends React.Component {
 			}
 		})
 	}
-	addToStoreHandler(){
-		
+	addToStoreHandler(storeId){
+		const name = this.props.userInfo.name;
+		if (name) {
+			const result = addToStore(name,storeId);
+			result.then(res => {
+				return res.json();
+			}).then(json => {
+				if (json.errno == 0) {
+					console.log('添加成功');
+				}
+			})
+		}else{
+			console.log('请先登录');
+		}
 	}
 }
 
-export default ProductList
+//--------------redux react 绑定----------------------
+
+// 此处绑定的是把当前状态绑定到redux中
+// 从redux中获取信息
+function mapStateToProps(state){
+	return {
+		userInfo: state.userInfo
+	}
+}
+// 从redux获取操控方法
+function mapDispatchToProps(dispatch){
+	return {
+		userInfoActions: bindActionCreators(userInfoActionsFormOtherFile,dispatch)
+	}
+}
+
+// 返回出绑定redux的组件，上面两个函数作为参数
+export default connect(
+	mapStateToProps,
+	mapDispatchToProps
+)(ProductList);

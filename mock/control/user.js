@@ -2,17 +2,32 @@ const User = require('../model/user');
 
 const getUserData = (arg={}) => {
 	return new Promise((resolve,reject) => {
-		User.find(arg).exec((err,data) => {
+		User.findOne(arg).exec((err,data) => {
 			resolve(data);
 		})
 	})
 }
 
 // 用户登录
-const getUser = async (ctx) => {
-	
-	const content = await getUserData();
-	ctx.body = content;
+const userCheck = async (ctx) => {
+	let nameErr = true,
+		passwordErr = true;
+	const postData = ctx.request.body;
+	const userData = await getUserData({name: postData.name});
+	if (userData) {
+		nameErr = false;
+		if (userData.password == postData.password) {
+			passwordErr = false;
+		}
+	}else{
+		passwordErr = false;
+	}
+	ctx.body = {
+		errno: 0,
+		msg: 'success',
+		nameErr,
+		passwordErr
+	}
 }
 
 // 用户注册
@@ -29,8 +44,6 @@ const postUser = async (ctx) => {
 const addStore = async (ctx) => {
 	const data = ctx.request.body;
 	const userCurrent = await getUserData({name: data.name});
-
-	console.log(userCurrent[0].store);
 
 	const store = userCurrent[0].store ? [userCurrent[0].store].push(data.store) : data.store;
 
@@ -61,4 +74,4 @@ const addStore = async (ctx) => {
 }
 
 
-module.exports = {getUser,postUser,addStore};
+module.exports = {userCheck,postUser};

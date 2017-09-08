@@ -1,0 +1,1 @@
+export const LOGINFORM_UPDATE = 'LOGINFORM_UPDATE'

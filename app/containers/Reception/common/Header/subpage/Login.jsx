@@ -1,17 +1,12 @@
 import React from 'react'
 import PureRenderMixin from 'react-addons-pure-render-mixin'
-
-import SessionStore from '../../../../util/sessionStore'; //缓存(里面有getItem和setItem方法)
-import { ADMININFO } from '../../../../config/sessionStoreKey';//存放关键字常量
 import { bindActionCreators } from 'redux'; //redux自带的发起action方法
 import { connect } from 'react-redux'; //连接redux
-import * as adminInfoActionsFormOtherFile from '../../../../actions/adminInfo'
+import * as userInfoActionsFormOtherFile from '../../../../../actions/userInfo'
 
+import { postLoginData } from '../../../../../fetch/user/user'
 
-
-import { postAdminData } from '../../../../fetch/admin/admin'
-
-import LoginComponent from '../../../../components/Login'
+import LoginComponent from '../../../../../components/Login'
 
 import './style.less'
 
@@ -27,7 +22,7 @@ class Login extends React.Component {
 	}
 	render(){
 		return(
-			<div className='login-container'>
+			<div className='reception-login-container'>
 				{
 					<LoginComponent data={this.state.data} 
 									nameErr={this.state.nameErr}
@@ -39,7 +34,7 @@ class Login extends React.Component {
 		)
 	}
 	resultHandler(name,password){
-		const result = postAdminData(name,password);
+		const result = postLoginData(name,password);
 		result.then(res => {
 			return res.json();
 		}).then(json => {
@@ -50,14 +45,16 @@ class Login extends React.Component {
 					controller: !this.state.controller
 				});
 
+				// 如果用户名和密码都正确，则把用户名更新到redux中去
+				// 由于setState是异步操作，此处需要使用json.nameErr进行判定
 				if (json.nameErr == false && json.passwordErr == false) {
-					this.props.adminInfoActions.update({
-						adminInfo: name
-					});
+					this.props.userInfoActions.update({
+						name: name
+					})
+					
+					// 登录成功后，执行hideForm
+					this.props.hideFormFn();
 
-					SessionStore.setItem(ADMININFO,name);
-
-					this.props.loginFn(true);
 				}
 			}
 		})
@@ -70,13 +67,13 @@ class Login extends React.Component {
 // 从redux中获取信息
 function mapStateToProps(state){
 	return {
-		adminInfo: state.adminInfo
+		userInfo: state.userInfo
 	}
 }
 // 从redux获取操控方法
 function mapDispatchToProps(dispatch){
 	return {
-		adminInfoActions: bindActionCreators(adminInfoActionsFormOtherFile,dispatch)
+		userInfoActions: bindActionCreators(userInfoActionsFormOtherFile,dispatch)
 	}
 }
 

@@ -44,8 +44,11 @@ class Login extends React.Component {
 		)
 	}
 	componentDidUpdate(prevProps,prevState){
-		if (this.props.nameErr === prevProps.nameErr
-			&& this.props.passwordErr === prevProps.passwordErr) {
+		// 此处需要父组件传递一个controller作为重定向
+		// 因为单纯的判断props，两次输入错误的时候，props没有变化
+		// 都会直接触发下面的return
+		// 所以props不能作为判断标准，state的话经过多次试验，也不行，所以加重定向
+		if (this.props.controller === prevProps.controller) {
 			return;
 		}
 		this.setState({

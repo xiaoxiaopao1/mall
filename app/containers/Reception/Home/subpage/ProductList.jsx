@@ -7,7 +7,6 @@ import * as userInfoActionsFormOtherFile from '../../../../actions/userInfo'
 
 
 import { getProductListData } from '../../../../fetch/product/product'
-import { addToStore } from '../../../../fetch/store/store'
 
 import ReceptionProductList from '../../../../components/ReceptionProductList'
 import Pagination from './Pagination'
@@ -29,8 +28,7 @@ class ProductList extends React.Component {
 					this.state.data
 					? this.state.data.length
 					  ? <div>
-						  <ReceptionProductList data={this.state.data}
-						  						addToStoreFn={this.addToStoreHandler.bind(this)} />
+						  <ReceptionProductList data={this.state.data} />
 					  	  <Pagination data={this.state.data}
 					  	  			  itemCount={this.state.itemCount}
 					  	  			  pageChangeFn={this.pageChangeHandler.bind(this)} />
@@ -73,21 +71,6 @@ class ProductList extends React.Component {
 				}
 			}
 		})
-	}
-	addToStoreHandler(storeId){
-		const name = this.props.userInfo.name;
-		if (name) {
-			const result = addToStore(name,storeId);
-			result.then(res => {
-				return res.json();
-			}).then(json => {
-				if (json.errno == 0) {
-					console.log('添加成功');
-				}
-			})
-		}else{
-			console.log('请先登录');
-		}
 	}
 }
 

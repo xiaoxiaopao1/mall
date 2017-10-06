@@ -81,7 +81,7 @@ class AddProduct extends React.Component {
 		}).then(json => {
 			switch (json.errno){
 				case 0:
-					alert('添加成功');
+					alert('更新成功');
 					break;
 				case 1:
 					alert('价格请输入数字');

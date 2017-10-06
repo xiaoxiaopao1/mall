@@ -1,9 +1,17 @@
 import React from 'react'
 import PureRenderMixin from 'react-addons-pure-render-mixin'
 
-import { getProductCount } from '../fetch/product/product'
+import PaginationComponent from '../../components/Pagination'
 
-import PaginationComponent from '../components/Pagination'
+/*
+*	分页组件
+*	@props 
+*	resultMethod	因为分页组件需要获取总数量，获取哪个列表的总数量不确定
+*	pageChangeFn	用来向父组件反馈变化页码
+*	itemCount 		单页产品个数
+*/
+
+
 
 class Pagination extends React.Component {
 	constructor(props,context){
@@ -18,8 +26,7 @@ class Pagination extends React.Component {
 			<div>
 				{
 					this.state.count
-					? <PaginationComponent data={this.props.data}
-										   itemCount={this.props.itemCount}
+					? <PaginationComponent itemCount={this.props.itemCount}
 										   count={this.state.count}
 										   pageChangeFn={this.props.pageChangeFn} />
 				    : ''
@@ -37,14 +44,16 @@ class Pagination extends React.Component {
 		this.resultHanlder();
 	}
 	resultHanlder(){
-		const result = getProductCount();
+		const result = this.props.resultMethod(this.props.keyword || '');
 		result.then(res => {
 			return res.json();
 		}).then(json => {
-			const count = json;
-			this.setState({
-				count
-			})
+			if (json) {
+				const count = json.count ? json.count : json;
+				this.setState({
+					count
+				})
+			}
 		})
 	}
 }

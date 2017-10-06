@@ -3,10 +3,10 @@ import PureRenderMixin from 'react-addons-pure-render-mixin'
 
 import { hashHistory } from 'react-router'
 
-import { getProductListData,delProductData } from '../../../fetch/product/product'
+import { getProductListData,delProductData,getProductCount } from '../../../fetch/product/product'
 
 import ProductListComponent from '../../../components/ProductList'
-import Pagination from './subpage/Pagination'
+import Pagination from '../../common/Pagination'
 
 class ProductList extends React.Component {
 	constructor(props,context){
@@ -26,9 +26,11 @@ class ProductList extends React.Component {
 					? this.state.data.length
 					  ? <div>
 						  <ProductListComponent data={this.state.data}
-						  						addToStoreFn={this.addToStoreHandler.bind(this)} />
+						  						delFn={this.delHandler.bind(this)}
+						  						updateFn={this.updateHandler.bind(this)} />
 					  	  <Pagination data={this.state.data}
 					  	  			  itemCount={this.state.itemCount}
+					  	  			  resultMethod={getProductCount}
 					  	  			  pageChangeFn={this.pageChangeHandler.bind(this)} />
 					  	</div>
 					  : '还没有添加产品'
@@ -70,8 +72,19 @@ class ProductList extends React.Component {
 			}
 		})
 	}
-	addToStoreHandler(){
-		
+	delHandler(_id){
+		const result = delProductData(_id);
+		result.then(res => {
+			return res.json();
+		}).then(json => {
+			if (json.errno == 0) {
+				console.log('删除成功');
+				this.resultHandler();
+			}
+		})
+	}
+	updateHandler(_id){
+		hashHistory.push(`/admin/addProduct/${encodeURIComponent(_id)}`);
 	}
 }
 

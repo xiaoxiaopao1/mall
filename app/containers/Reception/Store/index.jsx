@@ -5,7 +5,8 @@ import { bindActionCreators } from 'redux'; //redux自带的发起action方法
 import { connect } from 'react-redux'; //连接redux
 import * as userInfoActionsFormOtherFile from '../../../actions/userInfo'
 
-import { getStoreList } from '../../../fetch/store/store'
+import { getStoreList,countToStore,delToStore } from '../../../fetch/store/store'
+import { addToComment } from '../../../fetch/comment/comment'
 
 import StoreList from '../../../components/StoreList'
 
@@ -14,7 +15,8 @@ class Store extends React.Component {
 		super(props,context);
 		this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
 		this.state = {
-			data: null
+			data: null,
+			storeData: []
 		}
 	}
 	render(){
@@ -23,7 +25,11 @@ class Store extends React.Component {
 				{
 					this.state.data
 					? this.state.data.length
-						? <StoreList data={this.state.data} />
+						? <StoreList data={this.state.data}
+									 storeData={this.state.storeData}
+									 countFn={this.countHandler.bind(this)}
+									 delFn={this.delHandler.bind(this)}
+									 addToCommentFn={this.addToCommentHandler.bind(this)} />
 						: '还没有购物信息'
 					: ''
 				}
@@ -41,14 +47,54 @@ class Store extends React.Component {
 				return res.json();
 			}).then(json => {
 				if (json.errno == 0) {
-					const data = json.data;
+					const data = json.data,
+						  storeData = json.storeData;
+					console.log(json);
 					this.setState({
-						data
+						data,
+						storeData
 					})
 				}
 			})
 		}
-		
+	}
+	countHandler(_id,price,count){
+		const name = this.props.userInfo.name;
+		const result = countToStore(name,_id);
+		result.then(res => {
+			return res.json();
+		}).then(json => {
+			if (json.errno == 0) {
+				alert(`共付款: ￥${price * count}`);
+				this.resultHandler();
+			}
+		})
+
+	}
+	delHandler(_id){
+		const name = this.props.userInfo.name;
+		if (name) {
+			const result = delToStore(name,_id);
+			result.then(res => {
+				return res.json();
+			}).then(json => {
+				if (json.errno == 0) {
+					this.resultHandler();
+				}
+			})
+		}
+	}
+	addToCommentHandler(commentId,commentStar,comment,callback){
+		const name = this.props.userInfo.name;
+		const result = addToComment(name,commentId,commentStar,comment);
+		result.then(res => {
+			return res.json();
+		}).then(json => {
+			if (json.errno == 0) {
+				alert('评论成功');
+				callback();
+			}
+		})
 	}
 }
 

@@ -1,5 +1,7 @@
 import React from 'react'
 import PureRenderMixin from 'react-addons-pure-render-mixin'
+import SessionStore from '../../../../../util/sessionStore'; //缓存(里面有getItem和setItem方法)
+import { USERINFO } from '../../../../../config/sessionStoreKey';//里面有userinfo常量，缓存关键字
 import { bindActionCreators } from 'redux'; //redux自带的发起action方法
 import { connect } from 'react-redux'; //连接redux
 import * as userInfoActionsFormOtherFile from '../../../../../actions/userInfo'
@@ -51,6 +53,9 @@ class Login extends React.Component {
 					this.props.userInfoActions.update({
 						name: name
 					})
+
+					// 把用户名存入会话缓存
+					SessionStore.setItem(USERINFO,name);
 					
 					// 登录成功后，执行hideForm
 					this.props.hideFormFn();

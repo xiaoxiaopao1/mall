@@ -31,13 +31,31 @@ const userCheck = async (ctx) => {
 }
 
 // 用户注册
-const postUser = async (ctx) => {
+const addUser = async (ctx) => {
 	const data = ctx.request.body;
-	const user = new User(data);
-	user.save();
-	ctx.body = {
-		errno: 0,
-		message: 'success'
+	if (!data.name || !data.passwordErr) {
+		ctx.body = {
+			errno: 0,
+			message: 'error',
+			nameErr: true
+		};
+		return;
+	}
+	const hasSignedName = await getUserData({name: data.name});
+	if (hasSignedName) {
+		ctx.body = {
+			errno: 0,
+			message: 'success',
+			nameErr: true
+		}
+	}else{
+		const user = new User(data);
+		user.save();
+		ctx.body = {
+			errno: 0,
+			message: 'success',
+			nameErr: false
+		}
 	}
 }
 
@@ -74,4 +92,4 @@ const addStore = async (ctx) => {
 }
 
 
-module.exports = {userCheck,postUser};
+module.exports = {userCheck,addUser};

@@ -1,26 +1,21 @@
 import React from 'react'
 import PureRenderMixin from 'react-addons-pure-render-mixin'
 
+import './style.less'
 
-
-class Search extends React.Component {
+class ButtonStore extends React.Component {
 	constructor(props,context){
 		super(props,context);
 		this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
 	}
 	render(){
 		return(
-			<div>
-				111111
-			</div>
+			<button className='store-btn' onClick={this.clickHandler.bind(this)}>加入购物车</button>
 		)
 	}
-	componentDidMount(){
-		this.resultHandler();
-	}
-	resultHandler(){
-		
+	clickHandler(){
+		this.props.addToStoreFn();
 	}
 }
 
-export default Search
+export default ButtonStore

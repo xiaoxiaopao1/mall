@@ -41,16 +41,16 @@ class BackStage extends React.Component {
 	}
 	componentDidMount(){
 		//从缓存SessionStore中获取用户信息
-		// const adminInfo = SessionStore.getItem(ADMININFO);
-		// if (adminInfo) {
-		// 	this.props.adminInfoActions.update({
-		// 		adminInfo: adminInfo
-		// 	});
+		const adminInfo = SessionStore.getItem(ADMININFO);
+		if (adminInfo) {
+			this.props.adminInfoActions.update({
+				adminInfo: adminInfo
+			});
 
-		// 	this.setState({
-		// 		initDone: true
-		// 	})
-		// }
+			this.setState({
+				initDone: true
+			})
+		}
 	}
 	loginHandler(hasLogined){
 		if (hasLogined) {

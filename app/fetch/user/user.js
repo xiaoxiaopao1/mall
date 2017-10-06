@@ -9,12 +9,10 @@ export function postLoginData(name,password){
 	return result;
 }
 
-export function postNewUser(name,password,email,tel){
+export function addUser(name,password){
 	const result = post('/api/sign',{
 		name: name,
-		password: password,
-		email: email,
-		tel: tel
+		password: password
 	});
 	return result;
 }

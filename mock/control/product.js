@@ -83,7 +83,7 @@ const getSearchResultData = (re,num = 1, count = 3) => {
 }
 
 // 获取搜索结果数量，并post回去
-const getSearchResultCountData = (re) => {
+const getSearchResultCountData = (re,num = 1, count = 3) => {
 	return new Promise((resolve,reject) => {
 		Product.find({title: re}).count().exec((err,data) => {
 			resolve(data);
@@ -92,27 +92,37 @@ const getSearchResultCountData = (re) => {
 }
 
 const getSearchResult = async (ctx) => {
-	const keyword = ctx.request.body.keyword;
+	const data = ctx.request.body;
+	const reSpace = / +/g;
+	// 此处先去掉字符串的首尾空格，然后把中间的一个或多个连续空格替换为竖线
+	const keywords = data.keyword.trim().replace(reSpace,'|'); 
 
+	const re = new RegExp(keywords);
+	const result = await getSearchResultData(re,data.num,data.count);
+	console.log(`result:${result}`);
+
+	ctx.body = {
+		errno: 0,
+		msg: 'success',
+		data: result
+	}
+}
+
+
+const getSearchResultCount = async (ctx) => {
+	const keyword = ctx.request.body.keyword;
 	const reSpace = / +/g;
 	// 此处先去掉字符串的首尾空格，然后把中间的一个或多个连续空格替换为竖线
 	const keywords = keyword.trim().replace(reSpace,'|'); 
 
 	const re = new RegExp(keywords);
-	const result = await getSearchResultData(re);
 	const count = await getSearchResultCountData(re);
-
-	console.log(`count: ${count}`);
-	console.log(`____________`);
-	console.log(`result: ${result}`);
 	ctx.body = {
 		errno: 0,
 		msg: 'success',
-		data: result,
 		count
 	}
 }
-
 
 // 后台添加产品信息
 const addProduct = async (ctx) => {
@@ -192,4 +202,4 @@ const getProductCount = async (ctx) => {
 	ctx.body = count;
 }
 
-module.exports = { getProductCount,getProductList,getSearchResult,addProduct,delProduct,updateProduct,getSingleProduct };
+module.exports = { getProductCount,getProductList,getSearchResult,getSearchResultCount,addProduct,delProduct,updateProduct,getSingleProduct };

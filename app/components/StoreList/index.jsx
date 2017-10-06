@@ -19,21 +19,24 @@ class StoreList extends React.Component {
 					<span>数量</span>
 					<span>总价</span>
 					<span>结算</span>
+					<span>删除</span>
+					<span>评价</span>
 				</div>
 				{
 					this.props.data.map((item,index) => {
 						return(
-							<StoreItem key={index} data={item} />
+							<StoreItem key={index} 
+									   data={item}
+									   storeData={this.props.storeData[index]}
+									   countFn={this.props.countFn}
+									   delFn={this.props.delFn}
+									   addToCommentFn={this.props.addToCommentFn} />
 						)
 					})
 				}
 			</div>
-			
 		)
 	}
-	componentDidMount(){
-	}
-	
 }
 
 export default StoreList

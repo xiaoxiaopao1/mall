@@ -22,10 +22,10 @@ class Search extends React.Component {
 		)
 	}
 	componentDidMount(){
-		const prevKeyword = this.props.prevKeyword;
-		if (prevKeyword) {
+		const keyword = this.props.keyword;
+		if (keyword) {
 			this.setState({
-				keyword: prevKeyword
+				keyword
 			})
 		}
 	}
@@ -35,7 +35,7 @@ class Search extends React.Component {
 		})
 	}
 	clickHandler(){
-		if (this.props.currentKeyword === this.state.keyword) {
+		if (this.props.keyword === this.state.keyword) {
 			return;
 		}
 		hashHistory.push(`/search/${encodeURIComponent(this.state.keyword)}`);

@@ -1,50 +1,100 @@
-.store-item{
+.store-comment{
 	width: 100%;
-	padding: 20px 0;
-	font-size: 0;
 
-	li{
-		display: inline-block;
-		vertical-align: middle;
-		width: 200px;
-		font-size: 15px;
-		color: #404040;
-		text-align: center;
+	.store-item{
+		width: 100%;
+		padding: 20px 0;
+		font-size: 0;
 
-		.pic{
-			width: 200px;
-		}
-
-		p{
-			text-align: center;
-		}
-
-		.reduce-btn,
-		.add-btn{
+		li{
 			display: inline-block;
-			width: 50px;
-			line-height: 30px;
-			text-align: center;
-			font-size: 20px;
-			font-weight: bold;
-			cursor: pointer;
-		}
-
-		.count-input{
-			display: inline-block;
-			width: 100px;
-			line-height: 30px;
-			text-align: center;
-		}
-
-		.settlement-btn{
-			display: inline-block;
-			width: 100px;
-			line-height: 30px;
+			vertical-align: middle;
+			width: 145px;
 			font-size: 15px;
 			color: #404040;
 			text-align: center;
+
+			.pic{
+				width: 145px;
+			}
+
+			p{
+				text-align: center;
+			}
+
+			.reduce-btn,
+			.add-btn{
+				display: inline-block;
+				width: 36px;
+				line-height: 30px;
+				text-align: center;
+				font-size: 20px;
+				font-weight: bold;
+				cursor: pointer;
+			}
+
+			.count-input{
+				display: inline-block;
+				width: 72px;
+				line-height: 30px;
+				text-align: center;
+			}
+
+			.settlement-btn,
+			.del-btn,
+			.comment-btn{
+				display: inline-block;
+				width: 100px;
+				line-height: 30px;
+				font-size: 15px;
+				color: #404040;
+				text-align: center;
+				cursor: pointer;
+			}
+		}
+	}
+
+	.comment{
+		box-sizing: border-box;
+		width: 100%;
+		padding: 0 40px;
+
+		.comment-level{
+			width: 100%;
+			padding: 10px 0;
+
+			.comment-word,
+			.comment-star{
+				display: inline-block;
+				vertical-align: middle;
+			}
+		}
+
+		.comment-content{
+			display: block;
+			width: 100%;
+			min-height: 80px;
+			margin-bottom: 10px;
+			outline: none;
+			border: 1px solid #404040;
+		}
+
+		button{
+			width: 50px;
+			height: 28px;
+			font-size: 15px;
+			line-height: 25px;
+			text-align: center;
+			margin-right: 20px;
 			cursor: pointer;
+			border: 1px solid #404040;
+		}
+
+		button:hover{
+			background-color: #e9203d;
+			color: #fff;
+			border: 1px solid #fff;
 		}
 	}
 }
+

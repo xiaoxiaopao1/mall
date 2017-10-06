@@ -1,7 +1,10 @@
 import React from 'react'
 import PureRenderMixin from 'react-addons-pure-render-mixin'
 
+import { hashHistory } from 'react-router'
+
 import ProductItem from '../ProductItem'
+import ButtonStore from '../../containers/Reception/common/ButtonStore'
 
 
 class ReceptionProductList extends React.Component {
@@ -19,7 +22,8 @@ class ReceptionProductList extends React.Component {
 							return (
 								<div className='item-container' key={index}>
 									<ProductItem data={item} />
-									<button onClick={this.clickHandler.bind(this,item._id)}>加入购物车</button>
+									<button onClick={this.goDetailHandler.bind(this,item._id)}>查看详情</button>
+									<ButtonStore storeId={item._id}/>
 								</div>
 							)
 						})
@@ -28,8 +32,8 @@ class ReceptionProductList extends React.Component {
 			</div>
 		)
 	}
-	clickHandler(storeId){
-		this.props.addToStoreFn(storeId);
+	goDetailHandler(_id){
+		hashHistory.push(`/detail/${_id}`);
 	}
 }
 

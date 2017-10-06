@@ -25,7 +25,7 @@ class Login extends React.Component {
 				<input value={this.state.user}
 					   style={userInputStyle}
 					   onChange={this.userChange.bind(this)}
-					   placeholder='请输入用户名、邮箱或者手机号'
+					   placeholder='请输入用户名'
 					   onFocus={this.userFocus.bind(this)}/>
 				<span className='mark'
 					  style={userMarkStyle}>用户名错误，请重新输入</span>

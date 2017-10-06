@@ -6,11 +6,18 @@ import { connect } from 'react-redux'; //连接redux
 import * as userInfoActionsFormOtherFile from '../../../../actions/userInfo'
 
 
-import { getSearchResult } from '../../../../fetch/search/search'
+import { getSearchResult,getSearchResultCount } from '../../../../fetch/search/search'
 import { addToStore } from '../../../../fetch/store/store'
 
 import ReceptionProductList from '../../../../components/ReceptionProductList'
-import Pagination from './Pagination'
+import Pagination from '../../../common/Pagination'
+
+
+/*
+*	@props
+*	keyword		需要搜索的关键字
+*/
+
 
 class ProductList extends React.Component {
 	constructor(props,context){
@@ -19,10 +26,11 @@ class ProductList extends React.Component {
 		this.state = {
 			data: null,
 			pageNum: 1,
-			itemCount: 3
+			itemCount: 3,
 		}
 	}
 	render(){
+
 		return(
 			<div>
 				{
@@ -33,6 +41,8 @@ class ProductList extends React.Component {
 						  						addToStoreFn={this.addToStoreHandler.bind(this)} />
 					  	  <Pagination data={this.state.data}
 					  	  			  itemCount={this.state.itemCount}
+					  	  			  resultMethod={getSearchResultCount}
+					  	  			  keyword={this.props.keyword}
 					  	  			  pageChangeFn={this.pageChangeHandler.bind(this)} />
 					  	</div>
 					  	: '还没有添加产品'
@@ -45,10 +55,10 @@ class ProductList extends React.Component {
 		this.resultHandler();
 	}
 	componentDidUpdate(prevProps,prevState){
-		if (this.state.pageNum == prevState.pageNum) {
-			return;
+		if (this.props.keyword != prevProps.keyword || this.state.pageNum != prevState.pageNum) {
+			this.resultHandler();
 		}
-		this.resultHandler();
+		
 	}
 	pageChangeHandler(pageNum){
 		this.setState({
@@ -56,7 +66,7 @@ class ProductList extends React.Component {
 		})
 	}
 	resultHandler(){
-		const result = getSearchResult(this.state.pageNum,this.state.itemCount);
+		const result = getSearchResult(this.props.keyword,this.state.pageNum,this.state.itemCount);
 		result.then(res => {
 			return res.json();
 		}).then(json => {

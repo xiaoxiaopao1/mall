@@ -8,7 +8,8 @@ const Koa = require('koa'),
       poster = require('./control/poster'),
       product = require('./control/product'),
       adminInfo = require('./control/admin'),
-      store = require('./control/store');
+      store = require('./control/store'),
+      comment = require('./control/comment');
 
 mongoose.connect('mongodb://localhost:27017/mall',{useMongoClient:true});
 
@@ -24,7 +25,7 @@ router.get('/api/productCount',product.getProductCount)
 router.post('/api/login', user.userCheck);
 
 // 注册信息
-router.post('/api/sign', user.postUser);
+router.post('/api/sign', user.addUser);
 
 // 海报图信息
 router.get('/api/poster', poster.getPoster)
@@ -34,12 +35,30 @@ router.get('/api/poster', poster.getPoster)
 // 多关键字产品搜索
 router.post('/api/getSearchResult', product.getSearchResult)
 
+// 多关键字产品搜索结果数量
+router.post('/api/getSearchResultCount', product.getSearchResultCount)
+
 
 // 接收购物消息，并存储购物信息
 router.post('/api/addToStore', store.addToStore)
 
+// 删除购物信息
+router.post('/api/delToStore',store.delToStore)
+
 // 接收post过来的用户，获取该用户的购物信息
 router.post('/api/getStoreList',store.getStoreList)
+
+// 购物车产品结算
+router.post('/api/countToStore',store.countToStore);
+
+
+// 获取产品评论信息
+router.post('/api/getCommentList',comment.getCommentList);
+
+
+
+// 添加产品评论
+router.post('/api/addToComment',comment.addToComment);
 
 
 // 后台管理员信息
@@ -61,4 +80,5 @@ router.post('/api/backStage/getSingleProduct',product.getSingleProduct);
 app.use(router.routes())
    .use(router.allowedMethods());
 app.listen(3000);
+
 
